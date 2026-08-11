@@ -2,628 +2,130 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gold Price Poster Generator Pro - Live BAJUS Auto Sync</title>
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gold Price Poster - Manual Edit</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Poppins:wght@300;400;600&display=swap">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-    body { background-color: #08080a; color: #ffffff; padding: 12px 8px; }
+    body { background: #08080a; color: #fff; padding: 20px; }
+    .main-container { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; max-width: 1000px; margin: auto; }
+    .editor-section, .poster-wrapper { width: 100%; max-width: 450px; }
     
-    .main-container {
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 20px;
-      width: 100%;
-      max-width: 1050px;
-      margin: 0 auto;
-      align-items: center;
-    }
-
-    @media (min-width: 850px) {
-      body { padding: 30px 20px; }
-      .main-container { flex-direction: row; align-items: flex-start; }
-    }
-
-    .editor-section {
-      width: 100%;
-      background: #121215;
-      padding: 18px;
-      border-radius: 14px;
-      border: 1px solid #23232a;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-    }
-
-    .editor-section h2 {
-      font-size: 1.05rem;
-      margin-bottom: 12px;
-      color: #f1c40f;
-      border-bottom: 1px solid #282832;
-      padding-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .status-badge {
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 12px;
-      background: #1e293b;
-      color: #38bdf8;
-      border: 1px solid #0284c7;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .pulse-dot {
-      width: 6px;
-      height: 6px;
-      background: #22c55e;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #22c55e;
-      animation: blink 1s infinite alternate;
-    }
-
-    @keyframes blink {
-      0% { opacity: 0.3; }
-      100% { opacity: 1; }
-    }
-
-    .form-group { margin-bottom: 10px; }
-    .form-group label { display: block; font-size: 0.75rem; color: #bbb; margin-bottom: 4px; }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 9px 10px;
-      background: #1c1c22;
-      border: 1px solid #2f2f3a;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 0.85rem;
-    }
-
-    .shop-manager-grid {
-      display: flex;
-      gap: 6px;
-      margin-top: 4px;
-    }
-    .shop-manager-grid input { flex: 1; }
-    .btn-sm {
-      padding: 0 12px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.75rem;
-      cursor: pointer;
-      border: none;
-      white-space: nowrap;
-    }
-    .btn-add { background: #27ae60; color: #fff; }
-    .btn-del { background: #c0392b; color: #fff; }
-
-    .color-picker-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      background: #17171d;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #262632;
-      margin-bottom: 12px;
-    }
-    .color-picker-item { display: flex; flex-direction: column; gap: 4px; }
-    .color-picker-item label { font-size: 0.7rem; color: #ddd; }
-    .color-picker-item input[type="color"] {
-      padding: 2px; height: 38px; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 4px; width: 100%;
-    }
-
-    .card-inputs-grid {
-      display: flex; flex-direction: column; gap: 6px; background: #17171d; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #262632;
-    }
-    .card-inputs-grid h4 { font-size: 0.78rem; color: #e5c158; display: flex; justify-content: space-between; }
-    .card-inputs-grid h4 span { font-size: 0.65rem; color: #22c55e; font-weight: normal; }
-    .input-row { display: flex; gap: 8px; width: 100%; }
-    .input-row input { 
-      width: 50%; 
-      min-width: 0; 
-      padding: 8px; 
-      background: #0d0d11; 
-      border: 1px solid #21212a; 
-      border-radius: 6px; 
-      color: #888; 
-      font-size: 0.8rem;
-      cursor: not-allowed;
-    }
-
-    .btn-container { display: flex; gap: 10px; margin-top: 15px; flex-direction: column; }
-    .btn { width: 100%; padding: 12px; border-radius: 25px; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none; text-align: center; }
-    .btn-gold { background: linear-gradient(135deg, #f7eaad, #c5a059); color: #000; box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3); }
-    .btn-reset { background: #2a1515; color: #ff6b6b; border: 1px solid #4a2020; font-size: 0.8rem; padding: 8px; border-radius: 8px; }
-
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #27ae60;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      display: none;
-      z-index: 1000;
-    }
-
-    /* Poster Layout */
-    .poster-wrapper { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
-    .poster { padding: 16px; border-radius: 12px; width: 100%; max-width: 460px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); box-sizing: border-box; }
-    .poster-border { border: 1.5px solid var(--border-color, #c5a059); outline: 2px solid var(--border-color, #c5a059); outline-offset: 3px; padding: 18px 8px 12px 8px; border-radius: 4px; text-align: center; }
-    .logo-container { display: none; margin-bottom: 8px; justify-content: center; }
-    .logo-container img { max-height: 55px; max-width: 160px; object-fit: contain; }
-    .brand-header h2 { font-family: 'Cinzel', serif; font-size: 1.35rem; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 10px; color: var(--accent-color, #f7eaad); }
-    .title-section h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; line-height: 1; font-weight: 900; }
-    .title-section h2 { font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 2px; margin-top: 2px; color: var(--accent-color, #d4af37); }
-    .date-badge { display: inline-block; border: 1px solid var(--border-color, #d4af37); border-radius: 20px; padding: 3px 14px; font-size: 0.72rem; margin: 8px 0 16px 0; color: var(--accent-color, #d4af37); }
-    .price-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 16px; width: 100%; }
-    .card { border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--card-border, #222228); background: var(--card-bg, #080808); }
-    .card-header { font-weight: 800; font-size: 0.82rem; padding: 5px 1px; text-align: center; background: linear-gradient(180deg, #f7eaad 0%, #c5a059 100%); color: #000; }
-    .card-header.sonaton-title { font-size: 0.68rem !important; }
-    .card-body { padding: 8px 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
-    .card-body .label { font-size: 0.48rem; opacity: 0.7; }
-    .card-body .price-gram { font-size: 0.75rem; font-weight: 700; margin-top: 1px; }
-    .card-body hr { width: 70%; border: none; border-top: 1px solid var(--card-border, #222); margin: 5px 0; }
-    .card-body .currency-symbol { font-size: 0.8rem; color: var(--accent-color, #e5c158); }
-    .card-body .price-vori { font-size: 0.8rem; font-weight: 800; color: var(--accent-color, #f1c40f); }
-    .card-body .subtext { font-size: 0.4rem; opacity: 0.5; margin-top: 6px; }
-    .poster-footer p { font-size: 0.58rem; opacity: 0.8; }
-    .poster-footer .disclaimer { font-size: 0.48rem; margin-top: 5px; opacity: 0.5; }
-
-    /* Themes */
-    .theme-classic { --bg-color: #000000; --text-color: #ffffff; --accent-color: #f7eaad; --border-color: #c5a059; --card-bg: #080808; --card-border: #222228; }
-    .theme-emerald { --bg-color: #021a12; --text-color: #ffffff; --accent-color: #f3e5ab; --border-color: #d4af37; --card-bg: #01120c; --card-border: #083828; }
-    .theme-ruby { --bg-color: #1a0305; --text-color: #ffffff; --accent-color: #f7eaad; --border-color: #e5c158; --card-bg: #120103; --card-border: #38080c; }
-    .theme-navy { --bg-color: #050b14; --text-color: #ffffff; --accent-color: #f3e5ab; --border-color: #c5a059; --card-bg: #02060d; --card-border: #0f1d33; }
-    .theme-light { --bg-color: #ffffff; --text-color: #111111; --accent-color: #8b6508; --border-color: #b8860b; --card-bg: #fdfdfd; --card-border: #e2e2e2; }
-    .poster { background-color: var(--bg-color); color: var(--text-color); }
+    /* Poster Styling */
+    .poster { background: #000; padding: 20px; border: 2px solid #c5a059; border-radius: 10px; color: #fff; text-align: center; }
+    .brand { font-family: 'Cinzel', serif; font-size: 1.5rem; color: #f7eaad; margin-bottom: 10px; }
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+    .card { border: 1px solid #333; padding: 10px; border-radius: 8px; background: #111; }
+    .card h3 { font-size: 0.9rem; color: #d4af37; }
+    .val { font-size: 1.1rem; font-weight: bold; margin-top: 5px; }
+    
+    /* Editor Styling */
+    .editor { background: #15151a; padding: 20px; border-radius: 12px; border: 1px solid #333; }
+    .input-group { margin-bottom: 15px; }
+    label { font-size: 0.8rem; display: block; margin-bottom: 5px; color: #aaa; }
+    input { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: #fff; border-radius: 5px; }
+    .btn { width: 100%; padding: 12px; background: #d4af37; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-top: 10px; }
   </style>
 </head>
 <body>
 
-  <div id="toast" class="toast">✅ সেভ হয়েছে!</div>
-
-  <div class="main-container">
-    
-    <!-- Live Poster Render -->
-    <div class="poster-wrapper">
-      <div id="poster" class="poster theme-classic">
-        <div class="poster-border">
-          <div id="logo-wrapper" class="logo-container">
-            <img id="out-logo" src="" alt="Shop Logo">
-          </div>
-          <div class="brand-header">
-            <h2 id="out-shop">FORTUNE JEWELLERS</h2>
-          </div>
-          <div class="title-section">
-            <h1>GOLD</h1>
-            <h2>PRICE UPDATE</h2>
-            <div class="date-badge" id="out-date">DATE. -- . -- . ----</div>
-          </div>
-
-          <div class="price-cards">
-            <div class="card">
-              <div class="card-header">22K</div>
-              <div class="card-body">
-                <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-22-gram">লোড হচ্ছে...</span>
-                <hr>
-                <span class="label">PER VORI</span>
-                <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-22-vori">--</span>
-                <span class="subtext">BAJUS LIVE RATE</span>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">21K</div>
-              <div class="card-body">
-                <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-21-gram">লোড হচ্ছে...</span>
-                <hr>
-                <span class="label">PER VORI</span>
-                <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-21-vori">--</span>
-                <span class="subtext">BAJUS LIVE RATE</span>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header">18K</div>
-              <div class="card-body">
-                <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-18-gram">লোড হচ্ছে...</span>
-                <hr>
-                <span class="label">PER VORI</span>
-                <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-18-vori">--</span>
-                <span class="subtext">BAJUS LIVE RATE</span>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header sonaton-title">SONATON</div>
-              <div class="card-body">
-                <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-sn-gram">লোড হচ্ছে...</span>
-                <hr>
-                <span class="label">PER VORI</span>
-                <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-sn-vori">--</span>
-                <span class="subtext">BAJUS LIVE RATE</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="poster-footer">
-            <p id="out-address">Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000</p>
-            <p id="out-phone">+880 1324503708 · WhatsApp: +8801324503708</p>
-            <p class="disclaimer">Prices exclude making & stone charges · Source: BAJUS Live Sync</p>
-          </div>
-        </div>
+<div class="main-container">
+  <!-- Poster Preview -->
+  <div class="poster-wrapper">
+    <div id="poster" class="poster">
+      <h2 id="out-shop" class="brand">আপনার দোকানের নাম</h2>
+      <p id="out-date">তারিখ: --/--/----</p>
+      <div class="price-grid">
+        <div class="card"><h3>22K</h3><div id="out-22" class="val">৳ --</div></div>
+        <div class="card"><h3>21K</h3><div id="out-21" class="val">৳ --</div></div>
+        <div class="card"><h3>18K</h3><div id="out-18" class="val">৳ --</div></div>
+        <div class="card"><h3>সনাতন</h3><div id="out-sn" class="val">৳ --</div></div>
       </div>
+      <p id="out-address" style="font-size:0.7rem; opacity:0.8;">ঠিকানা এখানে বসবে</p>
     </div>
-
-    <!-- Controls -->
-    <div class="editor-section">
-      <h2>
-        ⚙️ কাস্টমাইজেশন প্যানেল
-        <span class="status-badge">
-          <span class="pulse-dot"></span> <span id="sync-status">BAJUS Live Auto-Sync</span>
-        </span>
-      </h2>
-
-      <!-- Shop Manager -->
-      <div class="form-group">
-        <label>🏪 সেভ করা দোকানের নাম সিলেক্ট করুন:</label>
-        <select id="shop-select" onchange="onShopSelectChange(); autoSave();">
-        </select>
-        <div class="shop-manager-grid">
-          <input type="text" id="new-shop-input" placeholder="নতুন শপের নাম লিখুন...">
-          <button class="btn-sm btn-add" onclick="addNewShopName()">➕ শপ সেভ</button>
-          <button class="btn-sm btn-del" onclick="deleteSelectedShopName()">🗑️ মুছুন</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>🎨 ডিজাইন থিম সিলেক্ট করুন:</label>
-        <select id="theme-select" onchange="changeTheme(); autoSave();">
-          <option value="theme-classic">১. Classic Gold (ডার্ক & গোল্ড)</option>
-          <option value="theme-emerald">২. Royal Emerald (গ্রিন & গোল্ড)</option>
-          <option value="theme-ruby">৩. Luxury Ruby (রেড & গোল্ড)</option>
-          <option value="theme-navy">৪. Midnight Navy (ব্লু & গোল্ড)</option>
-          <option value="theme-light">৫. Minimalist Light (হোয়াইট থিম)</option>
-          <option value="custom">⚙️ কাস্টম কালার (Custom Preset)</option>
-        </select>
-      </div>
-
-      <div class="color-picker-grid">
-        <div class="color-picker-item">
-          <label>🎨 ব্যাকগ্রাউন্ড কালার:</label>
-          <input type="color" id="picker-bg" value="#000000" oninput="applyCustomColors(); autoSave();">
-        </div>
-        <div class="color-picker-item">
-          <label>✍️ মূল টেক্সট কালার:</label>
-          <input type="color" id="picker-text" value="#ffffff" oninput="applyCustomColors(); autoSave();">
-        </div>
-        <div class="color-picker-item">
-          <label>✨ গোল্ড/হাইলাইট কালার:</label>
-          <input type="color" id="picker-accent" value="#f1c40f" oninput="applyCustomColors(); autoSave();">
-        </div>
-        <div class="color-picker-item">
-          <label>🖼️ বর্ডার কালার:</label>
-          <input type="color" id="picker-border" value="#c5a059" oninput="applyCustomColors(); autoSave();">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>🖼️ লোগো আপলোড করুন (PNG):</label>
-        <input type="file" id="input-logo" accept="image/*" onchange="uploadLogo(event)">
-      </div>
-
-      <div class="form-group">
-        <label>তারিখ (অটো সেটিং চালু আছে):</label>
-        <input type="text" id="input-date" value="" oninput="updatePosterText(); autoSave();">
-      </div>
-
-      <!-- READ-ONLY BAJUS PRICE DISPLAY -->
-      <div class="card-inputs-grid">
-        <h4>22K Rate <span>🔒 Auto Sync Active</span></h4>
-        <div class="input-row">
-          <input type="text" id="in-22-gram" value="৳ --" readonly>
-          <input type="text" id="in-22-vori" value="--" readonly>
-        </div>
-      </div>
-
-      <div class="card-inputs-grid">
-        <h4>21K Rate <span>🔒 Auto Sync Active</span></h4>
-        <div class="input-row">
-          <input type="text" id="in-21-gram" value="৳ --" readonly>
-          <input type="text" id="in-21-vori" value="--" readonly>
-        </div>
-      </div>
-
-      <div class="card-inputs-grid">
-        <h4>18K Rate <span>🔒 Auto Sync Active</span></h4>
-        <div class="input-row">
-          <input type="text" id="in-18-gram" value="৳ --" readonly>
-          <input type="text" id="in-18-vori" value="--" readonly>
-        </div>
-      </div>
-
-      <div class="card-inputs-grid">
-        <h4>SONATON Rate <span>🔒 Auto Sync Active</span></h4>
-        <div class="input-row">
-          <input type="text" id="in-sn-gram" value="৳ --" readonly>
-          <input type="text" id="in-sn-vori" value="--" readonly>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>ঠিকানা:</label>
-        <input type="text" id="input-address" value="Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000" oninput="updatePosterText(); autoSave();">
-      </div>
-
-      <div class="form-group">
-        <label>ফোন/হোয়াটসঅ্যাপ:</label>
-        <input type="text" id="input-phone" value="+880 1324503708 · WhatsApp: +8801324503708" oninput="updatePosterText(); autoSave();">
-      </div>
-
-      <div class="btn-container">
-        <button id="download-btn" class="btn btn-gold">📥 Download PNG Poster</button>
-        <button onclick="resetCustomization()" class="btn btn-reset">🔄 কাস্টমাইজেশন রিসেট করুন</button>
-      </div>
-    </div>
-
+    <button class="btn" onclick="downloadPoster()">📥 ডাউনলোড করুন</button>
   </div>
 
-  <script>
-    const DATA_SAVE_KEY = "gold_poster_saved_data_v11";
-    const SHOPS_LIST_KEY = "gold_poster_saved_shops_v11";
-    
-    let savedLogoData = "";
-    let shopList = ["FORTUNE JEWELLERS", "ROYAL JEWELLERS", "BAITUL JEWELRY"];
-
-    function setAutoTodayDate() {
-      const today = new Date();
-      const dd = String(today.getDate()).padStart(2, '0');
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const yyyy = today.getFullYear();
-      const formattedDate = `DATE. ${dd} . ${mm} . ${yyyy}`;
+  <!-- Manual Editor -->
+  <div class="editor-section">
+    <div class="editor">
+      <h3>⚙️ ম্যানুয়াল রেট আপডেট</h3>
+      <br>
+      <div class="input-group">
+        <label>দোকানের নাম:</label>
+        <input type="text" id="in-shop" oninput="updatePoster()">
+      </div>
+      <div class="input-group">
+        <label>আজকের তারিখ:</label>
+        <input type="text" id="in-date" oninput="updatePoster()">
+      </div>
       
-      document.getElementById('input-date').value = formattedDate;
-      document.getElementById('out-date').innerText = formattedDate;
+      <div class="price-inputs" style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="input-group"><label>22K ভরি:</label><input type="text" id="in-22" oninput="updatePoster()"></div>
+        <div class="input-group"><label>21K ভরি:</label><input type="text" id="in-21" oninput="updatePoster()"></div>
+        <div class="input-group"><label>18K ভরি:</label><input type="text" id="in-18" oninput="updatePoster()"></div>
+        <div class="input-group"><label>সনাতন ভরি:</label><input type="text" id="in-sn" oninput="updatePoster()"></div>
+      </div>
+
+      <div class="input-group">
+        <label>ঠিকানা:</label>
+        <input type="text" id="in-address" oninput="updatePoster()">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function updatePoster() {
+    // UI Update
+    document.getElementById('out-shop').innerText = document.getElementById('in-shop').value || "আপনার দোকানের নাম";
+    document.getElementById('out-date').innerText = "তারিখ: " + (document.getElementById('in-date').value || "--/--/----");
+    document.getElementById('out-22').innerText = "৳ " + (document.getElementById('in-22').value || "--");
+    document.getElementById('out-21').innerText = "৳ " + (document.getElementById('in-21').value || "--");
+    document.getElementById('out-18').innerText = "৳ " + (document.getElementById('in-18').value || "--");
+    document.getElementById('out-sn').innerText = "৳ " + (document.getElementById('in-sn').value || "--");
+    document.getElementById('out-address').innerText = document.getElementById('in-address').value || "ঠিকানা এখানে বসবে";
+
+    // Save to LocalStorage
+    const data = {
+      shop: document.getElementById('in-shop').value,
+      date: document.getElementById('in-date').value,
+      p22: document.getElementById('in-22').value,
+      p21: document.getElementById('in-21').value,
+      p18: document.getElementById('in-18').value,
+      psn: document.getElementById('in-sn').value,
+      addr: document.getElementById('in-address').value
+    };
+    localStorage.setItem('goldData', JSON.stringify(data));
+  }
+
+  function loadData() {
+    const saved = localStorage.getItem('goldData');
+    if(saved) {
+      const d = JSON.parse(saved);
+      document.getElementById('in-shop').value = d.shop || "";
+      document.getElementById('in-date').value = d.date || "";
+      document.getElementById('in-22').value = d.p22 || "";
+      document.getElementById('in-21').value = d.p21 || "";
+      document.getElementById('in-18').value = d.p18 || "";
+      document.getElementById('in-sn').value = d.psn || "";
+      document.getElementById('in-address').value = d.addr || "";
+      updatePoster();
     }
+  }
 
-    function initShops() {
-      const stored = localStorage.getItem(SHOPS_LIST_KEY);
-      if (stored) {
-        try { shopList = JSON.parse(stored); } catch(e){}
-      }
-      renderShopDropdown();
-    }
-
-    function renderShopDropdown() {
-      const select = document.getElementById('shop-select');
-      select.innerHTML = '';
-      shopList.forEach(shop => {
-        const opt = document.createElement('option');
-        opt.value = shop;
-        opt.text = shop;
-        select.appendChild(opt);
-      });
-    }
-
-    function addNewShopName() {
-      const val = document.getElementById('new-shop-input').value.trim();
-      if (val && !shopList.includes(val)) {
-        shopList.push(val);
-        localStorage.setItem(SHOPS_LIST_KEY, JSON.stringify(shopList));
-        renderShopDropdown();
-        document.getElementById('shop-select').value = val;
-        document.getElementById('new-shop-input').value = '';
-        onShopSelectChange();
-        autoSave();
-        showToast("নতুন শপের নাম সেভ হয়েছে!");
-      }
-    }
-
-    function deleteSelectedShopName() {
-      const selected = document.getElementById('shop-select').value;
-      if (shopList.length <= 1) return alert("নূন্যতম একটি শপ থাকতে হবে!");
-      shopList = shopList.filter(item => item !== selected);
-      localStorage.setItem(SHOPS_LIST_KEY, JSON.stringify(shopList));
-      renderShopDropdown();
-      onShopSelectChange();
-      autoSave();
-      showToast("শপ মুছে ফেলা হয়েছে!");
-    }
-
-    function onShopSelectChange() {
-      const val = document.getElementById('shop-select').value;
-      document.getElementById('out-shop').innerText = val;
-    }
-
-    function updatePosterText() {
-      document.getElementById('out-date').innerText = document.getElementById('input-date').value;
-      document.getElementById('out-address').innerText = document.getElementById('input-address').value;
-      document.getElementById('out-phone').innerText = document.getElementById('input-phone').value;
-    }
-
-    // Vercel Serverless API Auto-Sync
-    async function checkAndAutoSyncBajus() {
-      const syncStatus = document.getElementById('sync-status');
-      
-      try {
-        const res = await fetch("/api/get-gold-rate", { cache: "no-store" });
-        const json = await res.json();
-
-        if (json.success && json.data) {
-          const d = json.data;
-          
-          if (d.k22.vori) setPriceIfChanged('22', d.k22.gram, d.k22.vori);
-          if (d.k21.vori) setPriceIfChanged('21', d.k21.gram, d.k21.vori);
-          if (d.k18.vori) setPriceIfChanged('18', d.k18.gram, d.k18.vori);
-          if (d.sn.vori)  setPriceIfChanged('sn', d.sn.gram, d.sn.vori);
-
-          syncStatus.innerText = "BAJUS Live Auto-Sync Active";
-        } else {
-          syncStatus.innerText = "Retrying Sync...";
-        }
-      } catch (err) {
-        console.error("Sync Error:", err);
-        syncStatus.innerText = "Sync Error (Retrying...)";
-      }
-    }
-
-    function setPriceIfChanged(key, gram, vori) {
-      const inGram = document.getElementById(`in-${key}-gram`);
-      const inVori = document.getElementById(`in-${key}-vori`);
-      const outGram = document.getElementById(`out-${key}-gram`);
-      const outVori = document.getElementById(`out-${key}-vori`);
-
-      if (gram && inGram.value !== gram) {
-        inGram.value = gram;
-        outGram.innerText = gram;
-      }
-      if (vori && inVori.value !== vori) {
-        inVori.value = vori;
-        outVori.innerText = vori;
-      }
-    }
-
-    function changeTheme() {
-      const poster = document.getElementById('poster');
-      const selectedTheme = document.getElementById('theme-select').value;
-      
-      if(selectedTheme !== 'custom') {
-        poster.className = 'poster ' + selectedTheme;
-        poster.style.removeProperty('--bg-color');
-        poster.style.removeProperty('--text-color');
-        poster.style.removeProperty('--accent-color');
-        poster.style.removeProperty('--border-color');
-      } else {
-        applyCustomColors();
-      }
-    }
-
-    function applyCustomColors() {
-      const poster = document.getElementById('poster');
-      document.getElementById('theme-select').value = 'custom';
-      poster.className = 'poster';
-
-      poster.style.setProperty('--bg-color', document.getElementById('picker-bg').value);
-      poster.style.setProperty('--text-color', document.getElementById('picker-text').value);
-      poster.style.setProperty('--accent-color', document.getElementById('picker-accent').value);
-      poster.style.setProperty('--border-color', document.getElementById('picker-border').value);
-    }
-
-    function uploadLogo(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          savedLogoData = e.target.result;
-          document.getElementById('out-logo').src = savedLogoData;
-          document.getElementById('logo-wrapper').style.display = 'flex';
-          autoSave();
-        }
-        reader.readAsDataURL(file);
-      }
-    }
-
-    function autoSave() {
-      const config = {
-        shop: document.getElementById('shop-select').value,
-        date: document.getElementById('input-date').value,
-        address: document.getElementById('input-address').value,
-        phone: document.getElementById('input-phone').value,
-        theme: document.getElementById('theme-select').value,
-        bgColor: document.getElementById('picker-bg').value,
-        textColor: document.getElementById('picker-text').value,
-        accentColor: document.getElementById('picker-accent').value,
-        borderColor: document.getElementById('picker-border').value,
-        logoData: savedLogoData
-      };
-      try { 
-        localStorage.setItem(DATA_SAVE_KEY, JSON.stringify(config));
-      } catch(e){}
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.innerText = msg;
-      toast.style.display = "block";
-      setTimeout(() => { toast.style.display = "none"; }, 2500);
-    }
-
-    function loadSavedData() {
-      initShops();
-      setAutoTodayDate();
-
-      try {
-        const saved = localStorage.getItem(DATA_SAVE_KEY);
-        if (saved) {
-          const config = JSON.parse(saved);
-          if(config.shop) {
-            document.getElementById('shop-select').value = config.shop;
-            onShopSelectChange();
-          }
-          if(config.date) document.getElementById('input-date').value = config.date;
-          if(config.address) document.getElementById('input-address').value = config.address;
-          if(config.phone) document.getElementById('input-phone').value = config.phone;
-          
-          if(config.bgColor) document.getElementById('picker-bg').value = config.bgColor;
-          if(config.textColor) document.getElementById('picker-text').value = config.textColor;
-          if(config.accentColor) document.getElementById('picker-accent').value = config.accentColor;
-          if(config.borderColor) document.getElementById('picker-border').value = config.borderColor;
-
-          if(config.theme) {
-            document.getElementById('theme-select').value = config.theme;
-            changeTheme();
-          }
-
-          if(config.logoData) {
-            savedLogoData = config.logoData;
-            document.getElementById('out-logo').src = savedLogoData;
-            document.getElementById('logo-wrapper').style.display = 'flex';
-          }
-          updatePosterText();
-        }
-      } catch(e){}
-
-      checkAndAutoSyncBajus();
-      setInterval(checkAndAutoSyncBajus, 3000);
-    }
-
-    function resetCustomization() {
-      if(confirm("আপনি কি সব সেটিংস রিসেট করতে চান?")) {
-        localStorage.removeItem(DATA_SAVE_KEY);
-        localStorage.removeItem(SHOPS_LIST_KEY);
-        location.reload();
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", loadSavedData);
-
-    document.getElementById('download-btn').addEventListener('click', function() {
-      html2canvas(document.getElementById('poster'), { scale: 3, useCORS: true, backgroundColor: null })
-      .then(canvas => {
-        const link = document.createElement('a');
-        link.download = `Gold_Price_Poster.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-      });
+  function downloadPoster() {
+    html2canvas(document.querySelector("#poster")).then(canvas => {
+      const a = document.createElement('a');
+      a.download = "Gold_Rate.png";
+      a.href = canvas.toDataURL("image/png");
+      a.click();
     });
-  </script>
+  }
+
+  window.onload = loadData;
+</script>
 
 </body>
 </html>
