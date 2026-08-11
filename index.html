@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gold Price Poster Generator Pro</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div id="toast" class="toast">тЬЕ рж╕рзЗржн рж╣рзЯрзЗржЫрзЗ!</div>
+
+  <div class="main-container">
+    <div class="poster-wrapper">
+      <div id="poster" class="poster theme-classic">
+        <div class="poster-border">
+          <div id="logo-wrapper" class="logo-container">
+            <img id="out-logo" src="" alt="Shop Logo">
+          </div>
+          <div class="brand-header">
+            <h2 id="out-shop">FORTUNE JEWELLERS</h2>
+          </div>
+          <div class="title-section">
+            <h1>GOLD</h1>
+            <h2>PRICE UPDATE</h2>
+            <div class="date-badge" id="out-date">DATE. -- . -- . ----</div>
+          </div>
+          <div id="price-cards" class="price-cards"></div>
+          <div class="poster-footer">
+            <p id="out-address">Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000</p>
+            <p id="out-phone">+880 1324503708 ┬╖ WhatsApp: +8801324503708</p>
+            <p class="disclaimer">Prices exclude making & stone charges</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="editor-section">
+      <h2>
+        тЪЩя╕П ржХрж╛рж╕рзНржЯржорж╛ржЗржЬрзЗрж╢ржи ржкрзНржпрж╛ржирзЗрж▓
+        <span class="status-badge">тЬНя╕П ржорзНржпрж╛ржирзБрзЯрж╛рж▓ ржкрзНрж░рж╛ржЗрж╕ ржЗржиржкрзБржЯ</span>
+      </h2>
+
+      <div class="form-group">
+        <label>ЁЯПк рж╕рзЗржн ржХрж░рж╛ ржжрзЛржХрж╛ржирзЗрж░ ржирж╛ржо рж╕рж┐рж▓рзЗржХрзНржЯ ржХрж░рзБржи:</label>
+        <select id="shop-select"></select>
+        <div class="shop-manager-grid">
+          <input type="text" id="new-shop-input" placeholder="ржирждрзБржи рж╢ржкрзЗрж░ ржирж╛ржо рж▓рж┐ржЦрзБржи...">
+          <button class="btn-sm btn-add" data-action="add-shop">тЮХ рж╢ржк рж╕рзЗржн</button>
+          <button class="btn-sm btn-del" data-action="delete-shop">ЁЯЧСя╕П ржорзБржЫрзБржи</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ЁЯОи ржбрж┐ржЬрж╛ржЗржи ржерж┐ржо рж╕рж┐рж▓рзЗржХрзНржЯ ржХрж░рзБржи:</label>
+        <select id="theme-select">
+          <option value="theme-classic">рзз. Classic Gold (ржбрж╛рж░рзНржХ & ржЧрзЛрж▓рзНржб)</option>
+          <option value="theme-emerald">рзи. Royal Emerald (ржЧрзНрж░рж┐ржи & ржЧрзЛрж▓рзНржб)</option>
+          <option value="theme-ruby">рзй. Luxury Ruby (рж░рзЗржб & ржЧрзЛрж▓рзНржб)</option>
+          <option value="theme-navy">рзк. Midnight Navy (ржмрзНрж▓рзБ & ржЧрзЛрж▓рзНржб)</option>
+          <option value="theme-light">рзл. Minimalist Light (рж╣рзЛржпрж╝рж╛ржЗржЯ ржерж┐ржо)</option>
+          <option value="custom">тЪЩя╕П ржХрж╛рж╕рзНржЯржо ржХрж╛рж▓рж╛рж░ (Custom Preset)</option>
+        </select>
+      </div>
+
+      <div class="color-picker-grid">
+        <div class="color-picker-item">
+          <label>ЁЯОи ржмрзНржпрж╛ржХржЧрзНрж░рж╛ржЙржирзНржб ржХрж╛рж▓рж╛рж░:</label>
+          <input type="color" id="picker-bg" value="#000000">
+        </div>
+        <div class="color-picker-item">
+          <label>тЬНя╕П ржорзВрж▓ ржЯрзЗржХрзНрж╕ржЯ ржХрж╛рж▓рж╛рж░:</label>
+          <input type="color" id="picker-text" value="#ffffff">
+        </div>
+        <div class="color-picker-item">
+          <label>тЬи ржЧрзЛрж▓рзНржб/рж╣рж╛ржЗрж▓рж╛ржЗржЯ ржХрж╛рж▓рж╛рж░:</label>
+          <input type="color" id="picker-accent" value="#f1c40f">
+        </div>
+        <div class="color-picker-item">
+          <label>ЁЯЦ╝я╕П ржмрж░рзНржбрж╛рж░ ржХрж╛рж▓рж╛рж░:</label>
+          <input type="color" id="picker-border" value="#c5a059">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ЁЯЦ╝я╕П рж▓рзЛржЧрзЛ ржЖржкрж▓рзЛржб ржХрж░рзБржи (ржЧрзЛрж▓ ржЖржХрж╛рж░рзЗ ржжрзЗржЦрж╛ржмрзЗ):</label>
+        <input type="file" id="input-logo" accept="image/*">
+      </div>
+
+      <div class="form-group">
+        <label>рждрж╛рж░рж┐ржЦ (ржЕржЯрзЛ рж╕рзЗржЯрж┐ржВ ржЪрж╛рж▓рзБ ржЖржЫрзЗ):</label>
+        <input type="text" id="input-date">
+      </div>
+
+      <div id="card-inputs"></div>
+
+      <div class="form-group">
+        <label>ржарж┐ржХрж╛ржирж╛:</label>
+        <input type="text" id="input-address" value="Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000">
+      </div>
+
+      <div class="form-group">
+        <label>ржлрзЛржи/рж╣рзЛржпрж╝рж╛ржЯрж╕ржЕрзНржпрж╛ржк:</label>
+        <input type="text" id="input-phone" value="+880 1324503708 ┬╖ WhatsApp: +8801324503708">
+      </div>
+
+      <div class="btn-container">
+        <button id="download-btn" class="btn btn-gold">ЁЯУе Download PNG Poster</button>
+        <button id="reset-btn" class="btn btn-reset">ЁЯФД ржХрж╛рж╕рзНржЯржорж╛ржЗржЬрзЗрж╢ржи рж░рж┐рж╕рзЗржЯ ржХрж░рзБржи</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
