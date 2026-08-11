@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gold Price Poster Generator Pro</title>
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: #08080a; color: #ffffff; padding: 12px 8px; }
+    
+    .main-container {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 20px;
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      align-items: center;
+    }
+
+    @media (min-width: 850px) {
+      body { padding: 30px 20px; }
+      .main-container { flex-direction: row; align-items: flex-start; }
+    }
+
+    .editor-section {
+      width: 100%;
+      background: #121215;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid #23232a;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    }
+
+    .editor-section h2 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #f1c40f;
+      border-bottom: 1px solid #282832;
+      padding-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .save-status { font-size: 0.7rem; color: #2ecc71; font-weight: normal; display: none; }
+    .form-group { margin-bottom: 10px; }
+    .form-group label { display: block; font-size: 0.75rem; color: #bbb; margin-bottom: 4px; }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 9px 10px;
+      background: #1c1c22;
+      border: 1px solid #2f2f3a;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 0.85rem;
+    }
+
+    /* Shop Name Manager Grid */
+    .shop-manager-grid {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .shop-manager-grid input { flex: 1; }
+    .btn-sm {
+      padding: 0 12px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+    }
+    .btn-add { background: #27ae60; color: #fff; }
+    .btn-del { background: #c0392b; color: #fff; }
+
+    .color-picker-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      background: #17171d;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #262632;
+      margin-bottom: 12px;
+    }
+    .color-picker-item { display: flex; flex-direction: column; gap: 4px; }
+    .color-picker-item label { font-size: 0.7rem; color: #ddd; }
+    .color-picker-item input[type="color"] {
+      padding: 2px; height: 38px; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 4px; width: 100%;
+    }
+
+    .card-inputs-grid {
+      display: flex; flex-direction: column; gap: 6px; background: #17171d; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #262632;
+    }
+    .card-inputs-grid h4 { font-size: 0.78rem; color: #e5c158; }
+    .input-row { display: flex; gap: 8px; width: 100%; }
+    .input-row input { width: 50%; min-width: 0; padding: 8px; background: #111115; border: 1px solid #2d2d38; border-radius: 6px; color: #fff; font-size: 0.8rem; }
+
+    .btn-container { display: flex; gap: 10px; margin-top: 15px; flex-direction: column; }
+    .btn { width: 100%; padding: 12px; border-radius: 25px; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none; text-align: center; }
+    .btn-gold { background: linear-gradient(135deg, #f7eaad, #c5a059); color: #000; box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3); }
+    .btn-auto { background: #1e3a8a; color: #93c5fd; border: 1px solid #3b82f6; }
+    .btn-reset { background: #2a1515; color: #ff6b6b; border: 1px solid #4a2020; font-size: 0.8rem; padding: 8px; border-radius: 8px; }
+
+    /* Poster Layout */
+    .poster-wrapper { width: 100%; display: flex; justify-content: center; overflow-x: auto; }
+    .poster { padding: 16px; border-radius: 12px; width: 100%; max-width: 460px; box-shadow: 0 10px 30px rgba(0,0,0,0.9); box-sizing: border-box; }
+    .poster-border { border: 1.5px solid var(--border-color, #c5a059); outline: 2px solid var(--border-color, #c5a059); outline-offset: 3px; padding: 18px 8px 12px 8px; border-radius: 4px; text-align: center; }
+    .logo-container { display: none; margin-bottom: 8px; justify-content: center; }
+    .logo-container img { max-height: 55px; max-width: 160px; object-fit: contain; }
+    .brand-header h2 { font-family: 'Cinzel', serif; font-size: 1.35rem; letter-spacing: 1.5px; font-weight: 800; margin-bottom: 10px; color: var(--accent-color, #f7eaad); }
+    .title-section h1 { font-family: 'Cinzel', serif; font-size: 2.2rem; line-height: 1; font-weight: 900; }
+    .title-section h2 { font-family: 'Cinzel', serif; font-size: 1.05rem; letter-spacing: 2px; margin-top: 2px; color: var(--accent-color, #d4af37); }
+    .date-badge { display: inline-block; border: 1px solid var(--border-color, #d4af37); border-radius: 20px; padding: 3px 14px; font-size: 0.72rem; margin: 8px 0 16px 0; color: var(--accent-color, #d4af37); }
+    .price-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin-bottom: 16px; width: 100%; }
+    .card { border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; border: 1px solid var(--card-border, #222228); background: var(--card-bg, #080808); }
+    .card-header { font-weight: 800; font-size: 0.82rem; padding: 5px 1px; text-align: center; background: linear-gradient(180deg, #f7eaad 0%, #c5a059 100%); color: #000; }
+    .card-header.sonaton-title { font-size: 0.68rem !important; }
+    .card-body { padding: 8px 1px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; }
+    .card-body .label { font-size: 0.48rem; opacity: 0.7; }
+    .card-body .price-gram { font-size: 0.75rem; font-weight: 700; margin-top: 1px; }
+    .card-body hr { width: 70%; border: none; border-top: 1px solid var(--card-border, #222); margin: 5px 0; }
+    .card-body .currency-symbol { font-size: 0.8rem; color: var(--accent-color, #e5c158); }
+    .card-body .price-vori { font-size: 0.8rem; font-weight: 800; color: var(--accent-color, #f1c40f); }
+    .card-body .subtext { font-size: 0.4rem; opacity: 0.5; margin-top: 6px; }
+    .poster-footer p { font-size: 0.58rem; opacity: 0.8; }
+    .poster-footer .disclaimer { font-size: 0.48rem; margin-top: 5px; opacity: 0.5; }
+
+    /* Theme Presets */
+    .theme-classic { --bg-color: #000000; --text-color: #ffffff; --accent-color: #f7eaad; --border-color: #c5a059; --card-bg: #080808; --card-border: #222228; }
+    .theme-emerald { --bg-color: #021a12; --text-color: #ffffff; --accent-color: #f3e5ab; --border-color: #d4af37; --card-bg: #01120c; --card-border: #083828; }
+    .theme-ruby { --bg-color: #1a0305; --text-color: #ffffff; --accent-color: #f7eaad; --border-color: #e5c158; --card-bg: #120103; --card-border: #38080c; }
+    .theme-navy { --bg-color: #050b14; --text-color: #ffffff; --accent-color: #f3e5ab; --border-color: #c5a059; --card-bg: #02060d; --card-border: #0f1d33; }
+    .theme-light { --bg-color: #ffffff; --text-color: #111111; --accent-color: #8b6508; --border-color: #b8860b; --card-bg: #fdfdfd; --card-border: #e2e2e2; }
+    .poster { background-color: var(--bg-color); color: var(--text-color); }
+  </style>
+</head>
+<body>
+
+  <div class="main-container">
+    
+    <!-- Poster Section -->
+    <div class="poster-wrapper">
+      <div id="poster" class="poster theme-classic">
+        <div class="poster-border">
+          <div id="logo-wrapper" class="logo-container">
+            <img id="out-logo" src="" alt="Shop Logo">
+          </div>
+          <div class="brand-header">
+            <h2 id="out-shop">FORTUNE JEWELLERS</h2>
+          </div>
+          <div class="title-section">
+            <h1>GOLD</h1>
+            <h2>PRICE UPDATE</h2>
+            <div class="date-badge" id="out-date">DATE. 11 . 08 . 2026</div>
+          </div>
+
+          <div class="price-cards">
+            <div class="card">
+              <div class="card-header">22K</div>
+              <div class="card-body">
+                <span class="label">PER GRAM</span>
+                <span class="price-gram" id="out-22-gram">৳ 20,065</span>
+                <hr>
+                <span class="label">PER VORI</span>
+                <span class="currency-symbol">৳</span>
+                <span class="price-vori" id="out-22-vori">2,34,038</span>
+                <span class="subtext">BAJUS LIVE RATE</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">21K</div>
+              <div class="card-body">
+                <span class="label">PER GRAM</span>
+                <span class="price-gram" id="out-21-gram">৳ 19,165</span>
+                <hr>
+                <span class="label">PER VORI</span>
+                <span class="currency-symbol">৳</span>
+                <span class="price-vori" id="out-21-vori">2,23,541</span>
+                <span class="subtext">BAJUS LIVE RATE</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">18K</div>
+              <div class="card-body">
+                <span class="label">PER GRAM</span>
+                <span class="price-gram" id="out-18-gram">৳ 16,455</span>
+                <hr>
+                <span class="label">PER VORI</span>
+                <span class="currency-symbol">৳</span>
+                <span class="price-vori" id="out-18-vori">1,91,931</span>
+                <span class="subtext">BAJUS LIVE RATE</span>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header sonaton-title">SONATON</div>
+              <div class="card-body">
+                <span class="label">PER GRAM</span>
+                <span class="price-gram" id="out-sn-gram">৳ 13,800</span>
+                <hr>
+                <span class="label">PER VORI</span>
+                <span class="currency-symbol">৳</span>
+                <span class="price-vori" id="out-sn-vori">1,61,000</span>
+                <span class="subtext">BAJUS LIVE RATE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="poster-footer">
+            <p id="out-address">Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000</p>
+            <p id="out-phone">+880 1324503708 · WhatsApp: +8801324503708</p>
+            <p class="disclaimer">Prices exclude making & stone charges · Source: BAJUS</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customization Form -->
+    <div class="editor-section">
+      <h2>
+        ⚙️ কাস্টমাইজেশন প্যানেল
+        <span id="save-status" class="save-status">✓ অটো-সেভ হয়েছে</span>
+      </h2>
+
+      <div style="margin-bottom: 12px;">
+        <button id="fetch-bajus-btn" class="btn btn-auto" onclick="fetchLiveBajusPrice()">⚡ BAJUS থেকে অটো রেট আনুন</button>
+      </div>
+
+      <!-- Shop Name Selection & Management Option -->
+      <div class="form-group">
+        <label>🏪 সেভ করা দোকানের নাম সিলেক্ট করুন:</label>
+        <select id="shop-select" onchange="onShopSelectChange()">
+          <!-- Options populated dynamically -->
+        </select>
+        <div class="shop-manager-grid">
+          <input type="text" id="new-shop-input" placeholder="নতুন শপের নাম লিখুন...">
+          <button class="btn-sm btn-add" onclick="addNewShopName()">➕ সেভ</button>
+          <button class="btn-sm btn-del" onclick="deleteSelectedShopName()">🗑️ মুছুন</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>🎨 ডিজাইন থিম সিলেক্ট করুন:</label>
+        <select id="theme-select" onchange="changeTheme(); autoSaveData();">
+          <option value="theme-classic">১. Classic Gold (ডার্ক & গোল্ড)</option>
+          <option value="theme-emerald">২. Royal Emerald (গ্রিন & গোল্ড)</option>
+          <option value="theme-ruby">৩. Luxury Ruby (রেড & গোল্ড)</option>
+          <option value="theme-navy">৪. Midnight Navy (ব্লু & গোল্ড)</option>
+          <option value="theme-light">৫. Minimalist Light (হোয়াইট থিম)</option>
+          <option value="custom">⚙️ কাস্টম কালার (Custom Preset)</option>
+        </select>
+      </div>
+
+      <div class="color-picker-grid">
+        <div class="color-picker-item">
+          <label>🎨 ব্যাকগ্রাউন্ড কালার:</label>
+          <input type="color" id="picker-bg" value="#000000" oninput="applyCustomColors(); autoSaveData();">
+        </div>
+        <div class="color-picker-item">
+          <label>✍️ মূল টেক্সট কালার:</label>
+          <input type="color" id="picker-text" value="#ffffff" oninput="applyCustomColors(); autoSaveData();">
+        </div>
+        <div class="color-picker-item">
+          <label>✨ গোল্ড/হাইলাইট কালার:</label>
+          <input type="color" id="picker-accent" value="#f1c40f" oninput="applyCustomColors(); autoSaveData();">
+        </div>
+        <div class="color-picker-item">
+          <label>🖼️ বর্ডার কালার:</label>
+          <input type="color" id="picker-border" value="#c5a059" oninput="applyCustomColors(); autoSaveData();">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>🖼️ লোগো আপলোড করুন (PNG):</label>
+        <input type="file" id="input-logo" accept="image/*" onchange="uploadLogo(event)">
+      </div>
+
+      <div class="form-group">
+        <label>তারিখ (Date Text):</label>
+        <input type="text" id="input-date" value="DATE. 11 . 08 . 2026" oninput="updatePoster(); autoSaveData();">
+      </div>
+
+      <div class="card-inputs-grid">
+        <h4>22K Rate</h4>
+        <div class="input-row">
+          <input type="text" id="in-22-gram" value="৳ 20,065" placeholder="Per Gram" oninput="updatePoster(); autoSaveData();">
+          <input type="text" id="in-22-vori" value="2,34,038" placeholder="Per Vori" oninput="updatePoster(); autoSaveData();">
+        </div>
+      </div>
+
+      <div class="card-inputs-grid">
+        <h4>21K Rate</h4>
+        <div class="input-row">
+          <input type="text" id="in-21-gram" value="৳ 19,165" placeholder="Per Gram" oninput="updatePoster(); autoSaveData();">
+          <input type="text" id="in-21-vori" value="2,23,541" placeholder="Per Vori" oninput="updatePoster(); autoSaveData();">
+        </div>
+      </div>
+
+      <div class="card-inputs-grid">
+        <h4>18K Rate</h4>
+        <div class="input-row">
+          <input type="text" id="in-18-gram" value="৳ 16,455" placeholder="Per Gram" oninput="updatePoster(); autoSaveData();">
+          <input type="text" id="in-18-vori" value="1,91,931" placeholder="Per Vori" oninput="updatePoster(); autoSaveData();">
+        </div>
+      </div>
+
+      <div class="card-inputs-grid">
+        <h4>SONATON Rate</h4>
+        <div class="input-row">
+          <input type="text" id="in-sn-gram" value="৳ 13,800" placeholder="Per Gram" oninput="updatePoster(); autoSaveData();">
+          <input type="text" id="in-sn-vori" value="1,61,000" placeholder="Per Vori" oninput="updatePoster(); autoSaveData();">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>ঠিকানা:</label>
+        <input type="text" id="input-address" value="Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000" oninput="updatePoster(); autoSaveData();">
+      </div>
+
+      <div class="form-group">
+        <label>ফোন/হোয়াটসঅ্যাপ:</label>
+        <input type="text" id="input-phone" value="+880 1324503708 · WhatsApp: +8801324503708" oninput="updatePoster(); autoSaveData();">
+      </div>
+
+      <div class="btn-container">
+        <button id="download-btn" class="btn btn-gold">📥 Download PNG Poster</button>
+        <button onclick="resetCustomization()" class="btn btn-reset">🔄 কাস্টমাইজেশন রিসেট করুন</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DATA_SAVE_KEY = "gold_poster_saved_data_v3";
+    const SHOPS_LIST_KEY = "gold_poster_saved_shops";
+    
+    let saveTimeout = null;
+    let savedLogoData = "";
+    let shopList = ["FORTUNE JEWELLERS", "ROYAL JEWELLERS", "BAITUL JEWELRY"];
+
+    // Initialize Saved Shops
+    function initShops() {
+      const storedShops = localStorage.getItem(SHOPS_LIST_KEY);
+      if (storedShops) {
+        try { shopList = JSON.parse(storedShops); } catch(e){}
+      }
+      renderShopDropdown();
+    }
+
+    function renderShopDropdown() {
+      const select = document.getElementById('shop-select');
+      select.innerHTML = '';
+      shopList.forEach((shop, index) => {
+        const option = document.createElement('option');
+        option.value = shop;
+        option.text = shop;
+        select.appendChild(option);
+      });
+    }
+
+    function addNewShopName() {
+      const input = document.getElementById('new-shop-input');
+      const val = input.value.trim();
+      if (val && !shopList.includes(val)) {
+        shopList.push(val);
+        localStorage.setItem(SHOPS_LIST_KEY, JSON.stringify(shopList));
+        renderShopDropdown();
+        document.getElementById('shop-select').value = val;
+        input.value = '';
+        onShopSelectChange();
+        autoSaveData();
+      }
+    }
+
+    function deleteSelectedShopName() {
+      const select = document.getElementById('shop-select');
+      const selectedVal = select.value;
+      if (shopList.length <= 1) {
+        alert("নূন্যতম একটি শপের নাম থাকতে হবে!");
+        return;
+      }
+      shopList = shopList.filter(item => item !== selectedVal);
+      localStorage.setItem(SHOPS_LIST_KEY, JSON.stringify(shopList));
+      renderShopDropdown();
+      onShopSelectChange();
+      autoSaveData();
+    }
+
+    function onShopSelectChange() {
+      const val = document.getElementById('shop-select').value;
+      document.getElementById('out-shop').innerText = val;
+      autoSaveData();
+    }
+
+    function updatePoster() {
+      document.getElementById('out-date').innerText = document.getElementById('input-date').value;
+      document.getElementById('out-22-gram').innerText = document.getElementById('in-22-gram').value;
+      document.getElementById('out-22-vori').innerText = document.getElementById('in-22-vori').value;
+      document.getElementById('out-21-gram').innerText = document.getElementById('in-21-gram').value;
+      document.getElementById('out-21-vori').innerText = document.getElementById('in-21-vori').value;
+      document.getElementById('out-18-gram').innerText = document.getElementById('in-18-gram').value;
+      document.getElementById('out-18-vori').innerText = document.getElementById('in-18-vori').value;
+      document.getElementById('out-sn-gram').innerText = document.getElementById('in-sn-gram').value;
+      document.getElementById('out-sn-vori').innerText = document.getElementById('in-sn-vori').value;
+      document.getElementById('out-address').innerText = document.getElementById('input-address').value;
+      document.getElementById('out-phone').innerText = document.getElementById('input-phone').value;
+    }
+
+    // Advanced Cross-Origin Fetch Engine
+    async function fetchLiveBajusPrice() {
+      const btn = document.getElementById('fetch-bajus-btn');
+      btn.innerText = "⏳ ডাটা আনা হচ্ছে...";
+      btn.disabled = true;
+
+      const proxies = [
+        'https://corsproxy.io/?' + encodeURIComponent('https://www.bajus.org/gold-price'),
+        'https://api.codetabs.com/v1/proxy?quest=https://www.bajus.org/gold-price',
+        'https://api.allorigins.win/get?url=' + encodeURIComponent('https://www.bajus.org/gold-price')
+      ];
+
+      let rawHtml = "";
+
+      for (let p of proxies) {
+        try {
+          const res = await fetch(p);
+          if (res.ok) {
+            if (p.includes('allorigins')) {
+              const data = await res.json();
+              rawHtml = data.contents;
+            } else {
+              rawHtml = await res.text();
+            }
+            if (rawHtml && rawHtml.includes('table')) break;
+          }
+        } catch(e) { console.log('Proxy bypass failed:', p); }
+      }
+
+      if (rawHtml) {
+        try {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(rawHtml, 'text/html');
+          const rows = doc.querySelectorAll('table tbody tr');
+
+          rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            const cols = row.querySelectorAll('td');
+            if (cols.length >= 2) {
+              const priceVal = cols[1].innerText.trim();
+              if (text.includes('22')) document.getElementById('in-22-vori').value = priceVal;
+              else if (text.includes('21')) document.getElementById('in-21-vori').value = priceVal;
+              else if (text.includes('18')) document.getElementById('in-18-vori').value = priceVal;
+              else if (text.includes('sonaton') || text.includes('সনাতন')) document.getElementById('in-sn-vori').value = priceVal;
+            }
+          });
+
+          updatePoster();
+          autoSaveData();
+          alert("🎉 BAJUS থেকে সর্বশেষ দাম সফলভাবে আপডেট হয়েছে!");
+        } catch (err) {
+          alert("❌ ডাটা রিড করতে সমস্যা হয়েছে।");
+        }
+      } else {
+        alert("⚠️ BAJUS ওয়েবসাইট নিরাপত্তা কারণে ব্লক করেছে। অনুগ্রহ করে দাম ম্যানুয়ালি বসান।");
+      }
+
+      btn.innerText = "⚡ BAJUS থেকে অটো রেট আনুন";
+      btn.disabled = false;
+    }
+
+    function changeTheme() {
+      const poster = document.getElementById('poster');
+      const selectedTheme = document.getElementById('theme-select').value;
+      
+      if(selectedTheme !== 'custom') {
+        poster.className = 'poster ' + selectedTheme;
+        poster.style.removeProperty('--bg-color');
+        poster.style.removeProperty('--text-color');
+        poster.style.removeProperty('--accent-color');
+        poster.style.removeProperty('--border-color');
+      } else {
+        applyCustomColors();
+      }
+    }
+
+    function applyCustomColors() {
+      const poster = document.getElementById('poster');
+      document.getElementById('theme-select').value = 'custom';
+      poster.className = 'poster';
+
+      poster.style.setProperty('--bg-color', document.getElementById('picker-bg').value);
+      poster.style.setProperty('--text-color', document.getElementById('picker-text').value);
+      poster.style.setProperty('--accent-color', document.getElementById('picker-accent').value);
+      poster.style.setProperty('--border-color', document.getElementById('picker-border').value);
+    }
+
+    function uploadLogo(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          savedLogoData = e.target.result;
+          const logoImg = document.getElementById('out-logo');
+          document.getElementById('logo-wrapper').style.display = 'flex';
+          logoImg.src = savedLogoData;
+          autoSaveData();
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function autoSaveData() {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(() => {
+        const config = {
+          shop: document.getElementById('shop-select').value,
+          date: document.getElementById('input-date').value,
+          in22g: document.getElementById('in-22-gram').value,
+          in22v: document.getElementById('in-22-vori').value,
+          in21g: document.getElementById('in-21-gram').value,
+          in21v: document.getElementById('in-21-vori').value,
+          in18g: document.getElementById('in-18-gram').value,
+          in18v: document.getElementById('in-18-vori').value,
+          insng: document.getElementById('in-sn-gram').value,
+          insnv: document.getElementById('in-sn-vori').value,
+          address: document.getElementById('input-address').value,
+          phone: document.getElementById('input-phone').value,
+          theme: document.getElementById('theme-select').value,
+          bgColor: document.getElementById('picker-bg').value,
+          textColor: document.getElementById('picker-text').value,
+          accentColor: document.getElementById('picker-accent').value,
+          borderColor: document.getElementById('picker-border').value,
+          logoData: savedLogoData
+        };
+
+        try {
+          localStorage.setItem(DATA_SAVE_KEY, JSON.stringify(config));
+          const statusElem = document.getElementById('save-status');
+          if(statusElem) {
+            statusElem.style.display = 'inline';
+            setTimeout(() => { statusElem.style.display = 'none'; }, 2000);
+          }
+        } catch(e){}
+      }, 400);
+    }
+
+    function loadSavedData() {
+      initShops();
+      try {
+        const saved = localStorage.getItem(DATA_SAVE_KEY);
+        if (saved) {
+          const config = JSON.parse(saved);
+          if(config.shop) {
+            document.getElementById('shop-select').value = config.shop;
+            onShopSelectChange();
+          }
+          if(config.date) document.getElementById('input-date').value = config.date;
+          if(config.in22g) document.getElementById('in-22-gram').value = config.in22g;
+          if(config.in22v) document.getElementById('in-22-vori').value = config.in22v;
+          if(config.in21g) document.getElementById('in-21-gram').value = config.in21g;
+          if(config.in21v) document.getElementById('in-21-vori').value = config.in21v;
+          if(config.in18g) document.getElementById('in-18-gram').value = config.in18g;
+          if(config.in18v) document.getElementById('in-18-vori').value = config.in18v;
+          if(config.insng) document.getElementById('in-sn-gram').value = config.insng;
+          if(config.insnv) document.getElementById('in-sn-vori').value = config.insnv;
+          if(config.address) document.getElementById('input-address').value = config.address;
+          if(config.phone) document.getElementById('input-phone').value = config.phone;
+          
+          if(config.bgColor) document.getElementById('picker-bg').value = config.bgColor;
+          if(config.textColor) document.getElementById('picker-text').value = config.textColor;
+          if(config.accentColor) document.getElementById('picker-accent').value = config.accentColor;
+          if(config.borderColor) document.getElementById('picker-border').value = config.borderColor;
+
+          if(config.theme) {
+            document.getElementById('theme-select').value = config.theme;
+            changeTheme();
+          }
+
+          if(config.logoData) {
+            savedLogoData = config.logoData;
+            document.getElementById('out-logo').src = savedLogoData;
+            document.getElementById('logo-wrapper').style.display = 'flex';
+          }
+
+          updatePoster();
+        }
+      } catch(e){}
+    }
+
+    function resetCustomization() {
+      if(confirm("আপনি কি সব সেটিংস ডিফল্ট অবস্থায় নিয়ে যেতে চান?")) {
+        localStorage.removeItem(DATA_SAVE_KEY);
+        localStorage.removeItem(SHOPS_LIST_KEY);
+        location.reload();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadSavedData);
+
+    document.getElementById('download-btn').addEventListener('click', function() {
+      html2canvas(document.getElementById('poster'), {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: null
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Gold_Price_Poster.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    });
+  </script>
+
+</body>
+</html>
