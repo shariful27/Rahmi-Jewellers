@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gold Price Poster Generator Pro - Live BAJUS</title>
+  <title>Gold Price Poster Generator Pro - Live BAJUS Auto Sync</title>
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -119,17 +119,28 @@
       padding: 2px; height: 38px; cursor: pointer; background: #111; border: 1px solid #333; border-radius: 4px; width: 100%;
     }
 
+    /* Read-Only Price Box Styles */
     .card-inputs-grid {
       display: flex; flex-direction: column; gap: 6px; background: #17171d; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; border: 1px solid #262632;
     }
-    .card-inputs-grid h4 { font-size: 0.78rem; color: #e5c158; }
+    .card-inputs-grid h4 { font-size: 0.78rem; color: #e5c158; display: flex; justify-content: space-between; }
+    .card-inputs-grid h4 span { font-size: 0.65rem; color: #22c55e; font-weight: normal; }
     .input-row { display: flex; gap: 8px; width: 100%; }
-    .input-row input { width: 50%; min-width: 0; padding: 8px; background: #111115; border: 1px solid #2d2d38; border-radius: 6px; color: #fff; font-size: 0.8rem; }
+    .input-row input { 
+      width: 50%; 
+      min-width: 0; 
+      padding: 8px; 
+      background: #0d0d11; 
+      border: 1px solid #21212a; 
+      border-radius: 6px; 
+      color: #888; 
+      font-size: 0.8rem;
+      cursor: not-allowed;
+    }
 
     .btn-container { display: flex; gap: 10px; margin-top: 15px; flex-direction: column; }
     .btn { width: 100%; padding: 12px; border-radius: 25px; font-weight: 700; font-size: 0.9rem; cursor: pointer; border: none; text-align: center; }
     .btn-gold { background: linear-gradient(135deg, #f7eaad, #c5a059); color: #000; box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3); }
-    .btn-save { background: #27ae60; color: #ffffff; border: 1px solid #2ecc71; font-size: 0.9rem; padding: 10px; border-radius: 8px; }
     .btn-reset { background: #2a1515; color: #ff6b6b; border: 1px solid #4a2020; font-size: 0.8rem; padding: 8px; border-radius: 8px; }
 
     .toast {
@@ -207,11 +218,11 @@
               <div class="card-header">22K</div>
               <div class="card-body">
                 <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-22-gram">৳ 20,160</span>
+                <span class="price-gram" id="out-22-gram">লোড হচ্ছে...</span>
                 <hr>
                 <span class="label">PER VORI</span>
                 <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-22-vori">2,35,146</span>
+                <span class="price-vori" id="out-22-vori">--</span>
                 <span class="subtext">BAJUS LIVE RATE</span>
               </div>
             </div>
@@ -219,11 +230,11 @@
               <div class="card-header">21K</div>
               <div class="card-body">
                 <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-21-gram">৳ 19,255</span>
+                <span class="price-gram" id="out-21-gram">লোড হচ্ছে...</span>
                 <hr>
                 <span class="label">PER VORI</span>
                 <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-21-vori">2,24,590</span>
+                <span class="price-vori" id="out-21-vori">--</span>
                 <span class="subtext">BAJUS LIVE RATE</span>
               </div>
             </div>
@@ -231,11 +242,11 @@
               <div class="card-header">18K</div>
               <div class="card-body">
                 <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-18-gram">৳ 16,535</span>
+                <span class="price-gram" id="out-18-gram">লোড হচ্ছে...</span>
                 <hr>
                 <span class="label">PER VORI</span>
                 <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-18-vori">1,92,864</span>
+                <span class="price-vori" id="out-18-vori">--</span>
                 <span class="subtext">BAJUS LIVE RATE</span>
               </div>
             </div>
@@ -243,11 +254,11 @@
               <div class="card-header sonaton-title">SONATON</div>
               <div class="card-body">
                 <span class="label">PER GRAM</span>
-                <span class="price-gram" id="out-sn-gram">৳ 12,815</span>
+                <span class="price-gram" id="out-sn-gram">লোড হচ্ছে...</span>
                 <hr>
                 <span class="label">PER VORI</span>
                 <span class="currency-symbol">৳</span>
-                <span class="price-vori" id="out-sn-vori">1,57,522</span>
+                <span class="price-vori" id="out-sn-vori">--</span>
                 <span class="subtext">BAJUS LIVE RATE</span>
               </div>
             </div>
@@ -256,7 +267,7 @@
           <div class="poster-footer">
             <p id="out-address">Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000</p>
             <p id="out-phone">+880 1324503708 · WhatsApp: +8801324503708</p>
-            <p class="disclaimer">Prices exclude making & stone charges · Source: BAJUS</p>
+            <p class="disclaimer">Prices exclude making & stone charges · Source: BAJUS Live Sync</p>
           </div>
         </div>
       </div>
@@ -267,7 +278,7 @@
       <h2>
         ⚙️ কাস্টমাইজেশন প্যানেল
         <span class="status-badge">
-          <span class="pulse-dot"></span> <span id="sync-status">BAJUS 2s Sync Active</span>
+          <span class="pulse-dot"></span> <span id="sync-status">BAJUS Live Auto-Sync</span>
         </span>
       </h2>
 
@@ -321,53 +332,53 @@
 
       <div class="form-group">
         <label>তারিখ (অটো সেটিং চালু আছে):</label>
-        <input type="text" id="input-date" value="" oninput="updatePoster(); autoSave();">
+        <input type="text" id="input-date" value="" oninput="updatePosterText(); autoSave();">
       </div>
 
+      <!-- READ-ONLY BAJUS PRICE DISPLAY -->
       <div class="card-inputs-grid">
-        <h4>22K Rate</h4>
+        <h4>22K Rate <span>🔒 Auto Sync Active</span></h4>
         <div class="input-row">
-          <input type="text" id="in-22-gram" value="৳ 20,160" placeholder="Per Gram" oninput="updatePoster(); autoSave();">
-          <input type="text" id="in-22-vori" value="2,35,146" placeholder="Per Vori" oninput="updatePoster(); autoSave();">
+          <input type="text" id="in-22-gram" value="৳ --" readonly>
+          <input type="text" id="in-22-vori" value="--" readonly>
         </div>
       </div>
 
       <div class="card-inputs-grid">
-        <h4>21K Rate</h4>
+        <h4>21K Rate <span>🔒 Auto Sync Active</span></h4>
         <div class="input-row">
-          <input type="text" id="in-21-gram" value="৳ 19,255" placeholder="Per Gram" oninput="updatePoster(); autoSave();">
-          <input type="text" id="in-21-vori" value="2,24,590" placeholder="Per Vori" oninput="updatePoster(); autoSave();">
+          <input type="text" id="in-21-gram" value="৳ --" readonly>
+          <input type="text" id="in-21-vori" value="--" readonly>
         </div>
       </div>
 
       <div class="card-inputs-grid">
-        <h4>18K Rate</h4>
+        <h4>18K Rate <span>🔒 Auto Sync Active</span></h4>
         <div class="input-row">
-          <input type="text" id="in-18-gram" value="৳ 16,535" placeholder="Per Gram" oninput="updatePoster(); autoSave();">
-          <input type="text" id="in-18-vori" value="1,92,864" placeholder="Per Vori" oninput="updatePoster(); autoSave();">
+          <input type="text" id="in-18-gram" value="৳ --" readonly>
+          <input type="text" id="in-18-vori" value="--" readonly>
         </div>
       </div>
 
       <div class="card-inputs-grid">
-        <h4>SONATON Rate</h4>
+        <h4>SONATON Rate <span>🔒 Auto Sync Active</span></h4>
         <div class="input-row">
-          <input type="text" id="in-sn-gram" value="৳ 12,815" placeholder="Per Gram" oninput="updatePoster(); autoSave();">
-          <input type="text" id="in-sn-vori" value="1,57,522" placeholder="Per Vori" oninput="updatePoster(); autoSave();">
+          <input type="text" id="in-sn-gram" value="৳ --" readonly>
+          <input type="text" id="in-sn-vori" value="--" readonly>
         </div>
       </div>
 
       <div class="form-group">
         <label>ঠিকানা:</label>
-        <input type="text" id="input-address" value="Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000" oninput="updatePoster(); autoSave();">
+        <input type="text" id="input-address" value="Shop:- 28, Baitul Mukarram (Ground Floor) Dhaka - 1000" oninput="updatePosterText(); autoSave();">
       </div>
 
       <div class="form-group">
         <label>ফোন/হোয়াটসঅ্যাপ:</label>
-        <input type="text" id="input-phone" value="+880 1324503708 · WhatsApp: +8801324503708" oninput="updatePoster(); autoSave();">
+        <input type="text" id="input-phone" value="+880 1324503708 · WhatsApp: +8801324503708" oninput="updatePosterText(); autoSave();">
       </div>
 
       <div class="btn-container">
-        <button onclick="manualSaveData()" class="btn btn-save">💾 সেভ করুন (Manual Save)</button>
         <button id="download-btn" class="btn btn-gold">📥 Download PNG Poster</button>
         <button onclick="resetCustomization()" class="btn btn-reset">🔄 কাস্টমাইজেশন রিসেট করুন</button>
       </div>
@@ -376,8 +387,8 @@
   </div>
 
   <script>
-    const DATA_SAVE_KEY = "gold_poster_saved_data_v9";
-    const SHOPS_LIST_KEY = "gold_poster_saved_shops_v9";
+    const DATA_SAVE_KEY = "gold_poster_saved_data_v10";
+    const SHOPS_LIST_KEY = "gold_poster_saved_shops_v10";
     
     let savedLogoData = "";
     let shopList = ["FORTUNE JEWELLERS", "ROYAL JEWELLERS", "BAITUL JEWELRY"];
@@ -442,33 +453,53 @@
       document.getElementById('out-shop').innerText = val;
     }
 
-    function updatePoster() {
+    function updatePosterText() {
       document.getElementById('out-date').innerText = document.getElementById('input-date').value;
-      document.getElementById('out-22-gram').innerText = document.getElementById('in-22-gram').value;
-      document.getElementById('out-22-vori').innerText = document.getElementById('in-22-vori').value;
-      document.getElementById('out-21-gram').innerText = document.getElementById('in-21-gram').value;
-      document.getElementById('out-21-vori').innerText = document.getElementById('in-21-vori').value;
-      document.getElementById('out-18-gram').innerText = document.getElementById('in-18-gram').value;
-      document.getElementById('out-18-vori').innerText = document.getElementById('in-18-vori').value;
-      document.getElementById('out-sn-gram').innerText = document.getElementById('in-sn-gram').value;
-      document.getElementById('out-sn-vori').innerText = document.getElementById('in-sn-vori').value;
       document.getElementById('out-address').innerText = document.getElementById('input-address').value;
       document.getElementById('out-phone').innerText = document.getElementById('input-phone').value;
     }
 
-    // প্রতি ২ সেকেন্ড পর পর BAJUS ওয়েবসাইট চেক ও অটো-আপডেট
+    // মাল্টি-প্রক্সি ব্যাকআপ সাপোর্ট সহ শক্তিশালী BAJUS অটো-সিঙ্ক লজিক
     async function checkAndAutoSyncBajus() {
+      const targetUrl = "https://www.bajus.org/gold-price";
+      const proxies = [
+        `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
+      ];
+
+      let htmlText = "";
+
+      for (let proxy of proxies) {
+        try {
+          const res = await fetch(proxy);
+          if (res.ok) {
+            const contentType = res.headers.get("content-type");
+            if (proxy.includes("allorigins")) {
+              const data = await res.json();
+              htmlText = data.contents;
+            } else {
+              htmlText = await res.text();
+            }
+            if (htmlText && htmlText.length > 500) break;
+          }
+        } catch (e) {
+          console.warn("Proxy Error, trying fallback...", e);
+        }
+      }
+
+      if (!htmlText) {
+        document.getElementById('sync-status').innerText = "BAJUS Retrying...";
+        return;
+      }
+
       try {
-        const proxyUrl = "https://api.allorigins.win/raw?timestamp=" + new Date().getTime() + "&url=" + encodeURIComponent("https://www.bajus.org/gold-price");
-        const res = await fetch(proxyUrl, { cache: "no-store" });
-        if (!res.ok) return;
-        
-        const htmlText = await res.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, "text/html");
-
-        let changed = false;
         const rows = doc.querySelectorAll("table tbody tr");
+
+        if(rows.length === 0) return;
+
+        let isUpdated = false;
 
         rows.forEach(row => {
           const text = row.textContent.toLowerCase();
@@ -479,51 +510,43 @@
             const gramPrice = cols.length >= 3 ? cols[2].textContent.trim() : "";
 
             if (text.includes("22")) {
-              if (voriPrice && document.getElementById('in-22-vori').value !== voriPrice) {
-                document.getElementById('in-22-vori').value = voriPrice;
-                changed = true;
-              }
-              if (gramPrice && document.getElementById('in-22-gram').value !== gramPrice) {
-                document.getElementById('in-22-gram').value = gramPrice;
-                changed = true;
-              }
+              setPriceIfChanged('22', gramPrice, voriPrice);
+              isUpdated = true;
             } else if (text.includes("21")) {
-              if (voriPrice && document.getElementById('in-21-vori').value !== voriPrice) {
-                document.getElementById('in-21-vori').value = voriPrice;
-                changed = true;
-              }
-              if (gramPrice && document.getElementById('in-21-gram').value !== gramPrice) {
-                document.getElementById('in-21-gram').value = gramPrice;
-                changed = true;
-              }
+              setPriceIfChanged('21', gramPrice, voriPrice);
+              isUpdated = true;
             } else if (text.includes("18")) {
-              if (voriPrice && document.getElementById('in-18-vori').value !== voriPrice) {
-                document.getElementById('in-18-vori').value = voriPrice;
-                changed = true;
-              }
-              if (gramPrice && document.getElementById('in-18-gram').value !== gramPrice) {
-                document.getElementById('in-18-gram').value = gramPrice;
-                changed = true;
-              }
+              setPriceIfChanged('18', gramPrice, voriPrice);
+              isUpdated = true;
             } else if (text.includes("sonaton") || text.includes("সনাতন")) {
-              if (voriPrice && document.getElementById('in-sn-vori').value !== voriPrice) {
-                document.getElementById('in-sn-vori').value = voriPrice;
-                changed = true;
-              }
-              if (gramPrice && document.getElementById('in-sn-gram').value !== gramPrice) {
-                document.getElementById('in-sn-gram').value = gramPrice;
-                changed = true;
-              }
+              setPriceIfChanged('sn', gramPrice, voriPrice);
+              isUpdated = true;
             }
           }
         });
 
-        if (changed) {
-          updatePoster();
-          autoSave();
-          showToast("⚡ BAJUS নতুন রেট অটো আপডেট হয়েছে!");
+        if (isUpdated) {
+          document.getElementById('sync-status').innerText = "BAJUS Sync Active";
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error("Parsing Error:", err);
+      }
+    }
+
+    function setPriceIfChanged(key, gram, vori) {
+      const inGram = document.getElementById(`in-${key}-gram`);
+      const inVori = document.getElementById(`in-${key}-vori`);
+      const outGram = document.getElementById(`out-${key}-gram`);
+      const outVori = document.getElementById(`out-${key}-vori`);
+
+      if (gram && inGram.value !== gram) {
+        inGram.value = gram;
+        outGram.innerText = gram;
+      }
+      if (vori && inVori.value !== vori) {
+        inVori.value = vori;
+        outVori.innerText = vori;
+      }
     }
 
     function changeTheme() {
@@ -566,19 +589,10 @@
       }
     }
 
-    // অটো সেভ ফাংশন যা সাইট রিলোড হলেও ডাটা ঠিক রাখবে
     function autoSave() {
       const config = {
         shop: document.getElementById('shop-select').value,
         date: document.getElementById('input-date').value,
-        in22g: document.getElementById('in-22-gram').value,
-        in22v: document.getElementById('in-22-vori').value,
-        in21g: document.getElementById('in-21-gram').value,
-        in21v: document.getElementById('in-21-vori').value,
-        in18g: document.getElementById('in-18-gram').value,
-        in18v: document.getElementById('in-18-vori').value,
-        insng: document.getElementById('in-sn-gram').value,
-        insnv: document.getElementById('in-sn-vori').value,
         address: document.getElementById('input-address').value,
         phone: document.getElementById('input-phone').value,
         theme: document.getElementById('theme-select').value,
@@ -591,11 +605,6 @@
       try { 
         localStorage.setItem(DATA_SAVE_KEY, JSON.stringify(config));
       } catch(e){}
-    }
-
-    function manualSaveData() {
-      autoSave();
-      showToast("✅ সফলভাবে তথ্য সেভ করা হয়েছে!");
     }
 
     function showToast(msg) {
@@ -618,14 +627,6 @@
             onShopSelectChange();
           }
           if(config.date) document.getElementById('input-date').value = config.date;
-          if(config.in22g) document.getElementById('in-22-gram').value = config.in22g;
-          if(config.in22v) document.getElementById('in-22-vori').value = config.in22v;
-          if(config.in21g) document.getElementById('in-21-gram').value = config.in21g;
-          if(config.in21v) document.getElementById('in-21-vori').value = config.in21v;
-          if(config.in18g) document.getElementById('in-18-gram').value = config.in18g;
-          if(config.in18v) document.getElementById('in-18-vori').value = config.in18v;
-          if(config.insng) document.getElementById('in-sn-gram').value = config.insng;
-          if(config.insnv) document.getElementById('in-sn-vori').value = config.insnv;
           if(config.address) document.getElementById('input-address').value = config.address;
           if(config.phone) document.getElementById('input-phone').value = config.phone;
           
@@ -644,13 +645,13 @@
             document.getElementById('out-logo').src = savedLogoData;
             document.getElementById('logo-wrapper').style.display = 'flex';
           }
-          updatePoster();
+          updatePosterText();
         }
       } catch(e){}
 
-      // প্রতি ২ সেকেন্ড পর পর ব্যাকগ্রাউন্ডে চেক রান হবে
+      // ইনস্ট্যান্ট চেক এবং প্রতি ৩ সেকেন্ডে মাল্টি-প্রক্সি সিঙ্ক
       checkAndAutoSyncBajus();
-      setInterval(checkAndAutoSyncBajus, 2000);
+      setInterval(checkAndAutoSyncBajus, 3000);
     }
 
     function resetCustomization() {
